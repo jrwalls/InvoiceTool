@@ -1,0 +1,97 @@
+    #item {
+        width: 100%;
+    }
+
+    .navbar {
+        position: relative;
+    }
+
+    #hours {
+        width: 100%;
+    }
+
+    #rate {
+        width: 100%;
+    }
+
+    .labelAlign {
+        width: 100px;
+        display: inline-block;
+    }
+
+    .outer-invoice {
+        padding-top: 30px;
+    }
+
+    .pbPreview {
+        padding-bottom: 40px;
+    }
+
+    .bg-blue {
+        background-color: #e6efff;
+    }
+
+    .topright {
+        position: absolute;
+        top: 8px;
+        right: 16px;
+        font-size: 18px;
+    }
+
+    hr.previewBorder {
+        border-top: 3px solid black;
+    }
+
+    .signature-wrapper {
+        position: relative;
+        width: 400px;
+        height: 150px;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    .signature-pad {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 400px;
+        height: 150px;
+    }
+
+    .signature-button {
+        position: absolute;
+        left: 1%;
+        top: 3%;
+    }
+
+    .formfield * {
+        vertical-align: middle;
+    }
+
+    .heading {
+        font-family: 'Quicksand', sans-serif;
+    }
+
+    .innerContent {
+        font-family: 'IBM Plex Sans', sans-serif;
+    }
+
+    .centerTitle {
+        width: 100%;
+        text-align: center;
+        padding-bottom: 90px;
+    }
+
+    .invoice-bg {
+        padding-bottom: 50px;
+        padding-top: 50px;
+        background-color: #e0f7ff;
+        border: 1.5px solid black;
+    }
+
+    .footerText {
+        font-size: 12px;
+        text-align: center;
+    }

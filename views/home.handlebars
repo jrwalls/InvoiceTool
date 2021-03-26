@@ -1,0 +1,220 @@
+<h2 class="heading centerTitle">Invoice Creation Tool</h2>
+<div class="innerContent">
+    <form class="form-horizontal">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <label class="labelAlign" for="title">Invoice Title:</label>
+                    <input type="text" id="title" name="title" placeholder="Title Of Invoice">
+                    <br>
+                    <label class="labelAlign" for="invoiceNum">Invoice #:</label>
+                    <input type="text" id="invoiceNum" name="invoiceNum" placeholder="Invoice Number" />
+                    <br>
+                    <label class="labelAlign" for="sender">Sender:</label>
+                    <input type="text" id="sender" name="sender" placeholder="Who is this invoice from?" />
+                    <br>
+                    <label class="labelAlign" for="billto">Bill To:</label>
+                    <input type="text" id="billTo" name="billto" placeholder="Who is this invoice to?" />
+                    <br>
+                    <label class="labelAlign" for="company">Company:</label>
+                    <input type="text" id="company" name="company" placeholder="*Optional" />
+                    <br>
+                    <label class="labelAlign" for="date">Date:</label>
+                    <input type="date" id="curDate" name="date" />
+                    <br>
+                    <label class="labelAlign" for="duedate">Due Date:</label>
+                    <input type="date" id="dueDate" name="dueDate" />
+                    <br>
+                </div>
+                <div class="col">
+                    <label class="labelAlign" for="myLogo">Logo:</label>
+                    <input type="file" accept="image/*" id="picField" name="myLogo">
+                    <br>
+                    <br>
+                    <div class="formfield">
+                        <label class="labelAlign" for="notes">Notes:</label>
+                        <textarea style="padding-right:150px;" rows="6" id="notes" name="notes" placeholder="*Optional"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <p style="padding-bottom: 20px;"></p>
+    <table id="itemList" style="width: 100%" class="container-fluid table table-striped table-light table-bordered table-sm">
+        <colgroup>
+            <col span="1" style="width: 55%;">
+            <col span="1" style="width: 10%;">
+            <col span="1" style="width: 10%;">
+            <col span="1" style="width: 20%;">
+            <col span="1" style="width: 5%;">
+        </colgroup>
+        <thead class="thead-dark">
+            <tr>
+                <th>Service</th>
+                <th>Hours</th>
+                <th>Rate</th>
+                <th>Amount</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <form onsubmit="event.preventDefault();onFormSubmit();">
+                    <td><input id="item" name="item" type="text" required /></td>
+                    <td><input id="hours" onchange="updateAmount();" name="hours" type="text" /></td>
+                    <td><input id="rate" onchange="updateAmount();" name="rate" type="text" /></td>
+                    <td onchange="updateAmount();" id="curamount">$ 0.00</td>
+                    <td>
+                        <button style="padding-left: 20px; padding-right: 20px;" type="submit" class="btn btn-success btn-sm"><i class="fa fa-plus"></i></button>
+                </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <div class="container">
+        <div class="signature-wrapper">
+            <canvas id="signature-pad" class="signature-pad" width=400 height=150></canvas>
+            <button type="button" id="clear" class="signature-button btn btn-secondary">Clear</button>
+        </div>
+    </div>
+    <div class="col">
+        <label style="padding-top: 40px;" for="currency">Currency:</label>
+        <select name="currency" id="currency">
+            <option value="USD">USD</option>
+            <option value="CAD">CAD</option>
+        </select>
+        <p style="padding-bottom: 10px;"></p>
+        <p type="text" id="Total" name="Total"><b>Total: $0.00</b></p>
+    </div>
+    <div style="padding-top: 30px;"></div>
+    <button type="button" onClick="preview();" data-bs-toggle="modal" class="btn btn-warning">Preview <i class="fa fa-eye"></i></button>
+    <button onclick="ExportToExcel();" class="btn btn-success">Export .XLSX <i class="fa fa-file-excel"></i></button>
+    <div onClick="ExportToDoc();" class="btn btn-primary">Download .DOCX <i class="fa fa-file-word"></i>
+    </div>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Invoice Preview</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="preview" class="preview">
+                        <img src="#" id="imgshow" height="100" width="100" alt="img" />
+                        <h4 class="topright" id="previewInvoiceNumber"></h4>
+                        <h5 class="pbPreview centerTitle" id="previewInvoiceTitle"></h5>
+                        <p id="previewInvoiceSender"></p>
+                        <p id="previewInvoiceBillTo"></p>
+                        <p id="previewInvoiceDate"></p>
+                        <p id="previewInvoiceDueDate"></p>
+                        <p id="previewInvoiceCompany"></p>
+                        <p style="padding-bottom: 20px;" id="previewInvoiceNotes"></p>
+                        <hr class="previewBorder" />
+                        <table style="width: 100%" class=" container-fluid table table-striped table-bordered table-sm">
+                            <colgroup>
+                                <col span="1" style="width: 60%;">
+                                <col span="1" style="width: 10%;">
+                                <col span="1" style="width: 10%;">
+                                <col span="1" style="width: 20%;">
+                            </colgroup>
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Service</th>
+                                    <th>Hours</th>
+                                    <th>Rate</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody id="wrapper">
+                            </tbody>
+                        </table>
+                        <img src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" id="signatureImage" height="75" width="200" />
+                        <p id="previewTotal"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<table id="excelTable" width="100%" hidden>
+    <tbody>
+        <tr>
+            <th id="excelInvoiceTitle"></th>
+        </tr>
+        <tr>
+            <th id="excelInvoiceNumber"></th>
+        </tr>
+        <tr>
+            <th id="excelInvoiceSender"></th>
+        </tr>
+        <tr>
+            <th id="excelInvoiceBillTo"></th>
+        </tr>
+        <tr>
+            <th id="excelInvoiceCompany"></th>
+        </tr>
+        <tr>
+            <th id="excelInvoiceDate"></th>
+        </tr>
+        <tr>
+            <th id="excelInvoiceDueDate"></th>
+        </tr>
+        <tr>
+            <th id="excelInvoiceNotes"></th>
+        </tr>
+        <tr>
+            <th id="excelInvoiceNotes"></th>
+        </tr>
+        <tr>
+            <th>Service</th>
+            <th>Hours</th>
+            <th>Rate</th>
+            <th>Amount</th>
+        </tr>
+    </tbody>
+    <tbody>
+        <tr></tr>
+        <th id="excelTotal"></th>
+    </tbody>
+</table>
+<script>
+$(document).ready(function() {
+    document.getElementById("title").focus();
+});
+
+if (document.getElementById("picField").value == "") {
+    document.getElementById("imgshow").src = "/images/defaultlogo.png";
+}
+
+document.getElementById('picField').onchange = function(evt) {
+    if (document.getElementById("picField").value != "") {
+        var tgt = evt.target || window.event.srcElement,
+            files = tgt.files;
+
+        var fr = new FileReader();
+        fr.onload = function() {
+            document.getElementById('imgshow').src = fr.result;
+        }
+        fr.readAsDataURL(files[0]);
+    }
+}
+
+var signaturePad = new SignaturePad(document.getElementById('signature-pad'), {
+    backgroundColor: '#dbe9ff',
+    penColor: 'rgb(0, 0, 0)'
+});
+
+document.getElementById('clear').addEventListener('click', function() {
+    signaturePad.clear();
+    document.getElementById("signatureImage").src = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
+});
+
+document.getElementById("signature-pad").onclick = function(evt) {
+    var imgElement = document.getElementById("signatureImage");
+
+    var data = signaturePad.toDataURL('image/png');
+    var signatureData = data;
+    document.getElementById("signatureImage").src = signatureData;
+}
+</script>
